@@ -1,0 +1,7 @@
+diffusers==0.37.1
+onnxruntime-gpu==1.23.2
+transformers==4.56.1
+nvitop==1.5.3
+ultralytics==8.3.105
+insightface==0.7.3
+segment_anything==1.0

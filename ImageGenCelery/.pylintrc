@@ -1,0 +1,13 @@
+[MESSAGES CONTROL]
+disable=
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    broad-except,
+    too-many-arguments,
+    too-many-positional-arguments,
+    unused-argument,
+    wildcard-import,
+
+[FORMAT]
+max-line-length=150

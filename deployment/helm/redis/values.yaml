@@ -1,0 +1,131 @@
+# Default values for redis.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: redis
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "7"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  # NodePort, not the nginx-wan Ingress below -- Redis is raw TCP, not HTTP,
+  # so an Ingress can't carry it (same reason as MongoDB and RabbitMQ's AMQP
+  # port). NodePort works with no extra cluster infra -- connect via
+  # <any-node-IP>:<nodeport from `kubectl get svc`>.
+  type: NodePort
+  port: 6379
+
+# password here is a local/dev placeholder -- override with --set or a values
+# overlay backed by a real secret for anything beyond local dev.
+auth:
+  enabled: true
+  password: "admin"
+
+# Left disabled: an Ingress can't route Redis's raw wire protocol (see
+# service.type comment above), so enabling this doesn't make Redis reachable
+# -- it would just add a dead HTTP path in front of a non-HTTP service. Kept
+# here, off, in case someone with RBAC on the nginx-wan namespace patches its
+# tcp-services ConfigMap later (mapping port 6379 -> this Service); nothing
+# above needs to change if they do.
+ingress:
+  enabled: false
+  className: nginx-wan
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-dns
+  hosts:
+    - host: redis-image-gen.public.rke.app.dev.tmtco.org
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: redis-image-gen-tls
+      hosts:
+        - redis-image-gen.public.rke.app.dev.tmtco.org
+
+httpRoute:
+  enabled: false
+  annotations: {}
+  parentRefs:
+  - name: gateway
+    sectionName: http
+  hostnames:
+  - redis.local
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Redis has no HTTP endpoint to httpGet-probe; tcpSocket just checks the port
+# accepts connections.
+livenessProbe:
+  tcpSocket:
+    port: redis
+  initialDelaySeconds: 10
+  periodSeconds: 20
+readinessProbe:
+  tcpSocket:
+    port: redis
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+# Data directory persistence (RDB/AOF files). A single-replica Deployment + PVC
+# is enough for dev/demo use; go to a StatefulSet + Sentinel only if you
+# actually need Redis HA.
+persistence:
+  enabled: true
+  size: 5Gi
+  accessMode: ReadWriteOnce
+  storageClass: longhorn
+  mountPath: /data
+
+# Extra volumes/volumeMounts beyond the persistence one above.
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

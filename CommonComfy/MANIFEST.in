@@ -1,0 +1,34 @@
+include comfyui_common_lib/comfy_node/comfy/*.json
+include comfyui_common_lib/comfy_node/comfy/*/*.json
+include comfyui_common_lib/comfy_node/comfy/*/*/*.json
+include comfyui_common_lib/comfy_node/custom_nodes/ComfyUI_BrushNet/*/*.json
+include comfyui_common_lib/comfy_node/custom_nodes/ComfyUI_BrushNet/*/*.json
+include comfyui_common_lib/comfy_node/custom_nodes/custom_modules/*/*.json
+
+include comfyui_common_lib/comfy_node/comfy/*/*.txt
+include comfyui_common_lib/comfy_node/comfy/*/*/*.txt
+
+include comfyui_common_lib/comfy_node/custom_nodes/custom_modules/human_parsing/schp/modules/src/*.h
+include comfyui_common_lib/comfy_node/custom_nodes/custom_modules/human_parsing/schp/modules/src/*.cpp
+include comfyui_common_lib/comfy_node/custom_nodes/custom_modules/human_parsing/schp/modules/src/*.cu
+include comfyui_common_lib/comfy_node/custom_nodes/custom_modules/human_parsing/schp/modules/src/*/*.cuh
+include comfyui_common_lib/comfy_node/custom_nodes/custom_modules/human_parsing/schp/modules/src/*/*.h
+
+# ComfyUI_nunchaku/utils.py reads its own pyproject.toml for the plugin version.
+include comfyui_common_lib/comfy_node/custom_nodes/ComfyUI_nunchaku/*.toml
+include comfyui_common_lib/comfy_node/custom_nodes/ComfyUI_QwenImageLoraLoader/*.toml
+include comfyui_common_lib/comfy_node/custom_nodes/custom_modules/nunchaku/*.toml
+
+include comfyui_common_lib/comfy_node/custom_nodes/ComfyUI_WanVideoWrapper/*.json
+include comfyui_common_lib/comfy_node/custom_nodes/ComfyUI_WanVideoWrapper/*/*.json
+include comfyui_common_lib/comfy_node/custom_nodes/ComfyUI_VideoHelperSuite/*.json
+include comfyui_common_lib/comfy_node/custom_nodes/ComfyUI_VideoHelperSuite/*/*.json
+include comfyui_common_lib/comfy_node/custom_nodes/custom_modules/*/*/*.json
+include comfyui_common_lib/comfy_node/custom_nodes/custom_modules/*/*/*/*.json
+include comfyui_common_lib/comfy_node/custom_nodes/RES4LYF/*.json
+
+include comfyui_common_lib/comfy_node/custom_nodes/custom_modules/*/*/*.yaml
+include comfyui_common_lib/comfy_node/custom_nodes/custom_modules/*/*/*/*.yaml
+include comfyui_common_lib/comfy_node/custom_nodes/*.yaml
+include comfyui_common_lib/comfy_node/custom_nodes/*/*.yaml
+recursive-include comfyui_common_lib/comfy_node/custom_nodes *.yaml
